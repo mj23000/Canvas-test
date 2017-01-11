@@ -1,24 +1,28 @@
-var z=0;
-var prim=1;
+var canvas;
+var ctx;
+var gammel=null;
 
-function primUdregn(){
-	for(var j=1;j<=1000;j++){
-		prim=1;	
-		for(var i=2;i<j;i++){
-			z=j%i;
-			if (z==0)
-				prim=0;
-		}
-		if (prim==1)
-			document.getElementById("primsvar").innerHTML += j+" ";
-	}
-}
 
 function init(){
-	var touchzone = document.getElementById("touchzone");
-	touchzone.addEventListener("touchstart", touchHandler, false);
+	var touchzone = document.getElementById("mycanvas");
+	touchzone.addEventListener("touchmove", opdaterCanvas, false);
+	touchzone.addEventListener("touchend", end, false);
+	ctx = touchzone.getContext("2d");
+
 }
 
-function touchHandler(event){
-	document.getElementById("koordinater").innerHTML = 'x: ' + event.touches[0].pageX + ', y: ' + event.touches[0].pageY;
+function opdaterCanvas(e){
+	e.preventDefault();
+	if(gammel!=null){
+		ctx.beginPath();
+		ctx.moveTo(gammel.x, gammel.y);
+		ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+		ctx.stroke();
+	}
+	gammel={x:e.touches[0].pageX, y:e.touches[0].pageY};
+}
+
+function end(e){
+	e.preventDefault();
+	gammel=null;
 }
